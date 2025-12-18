@@ -27,7 +27,7 @@ To get a local copy up and running, follow these simple steps.
 2.  Navigate to the project directory.
 3.  Run the following command to build and start the services:
     ```sh
-    docker-compose up --build
+    docker compose up --build
     ```
 
 ## Built With

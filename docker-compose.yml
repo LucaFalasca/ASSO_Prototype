@@ -35,25 +35,33 @@ services:
       command: > # Lancio uno script che crea il topic
         bash -c "
           /opt/bitnami/scripts/kafka/entrypoint.sh /opt/bitnami/scripts/kafka/run.sh &
-          pid=$!;
+          pid=$$!;
           sleep 10;
           chmod +x /init-kafka.sh;
           /init-kafka.sh;
           wait $pid
         "
 
-    kafka_producer:
-      build: ./KafkaProducer
+    sensor_producer:
+      build: ./SensorProducer
       depends_on:
         kafka_broker:
           condition: service_healthy
-        kafka_consumer:
+        data_sensor_manager:
           condition: service_started
       command: >
         bash -c "sleep 3 && exec python -u producer.py"
 
-    kafka_consumer:
-      build: ./KafkaConsumer
+    data_sensor_manager:
+      build: ./DataSensorManager
+      depends_on:
+        kafka_broker:
+          condition: service_healthy
+      command: >
+        bash -c "sleep 3 && exec python -u sensor_manager.py"
+
+    alarm_reader:
+      build: ./AlarmReader
       depends_on:
         kafka_broker:
           condition: service_healthy
