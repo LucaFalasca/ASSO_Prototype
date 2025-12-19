@@ -32,7 +32,7 @@ services:
         interval: 30s
         timeout: 10s
         retries: 5
-      command: > # Lancio uno script che crea il topic
+      command: > # Lancio uno script che crea i topic
         bash -c "
           /opt/bitnami/scripts/kafka/entrypoint.sh /opt/bitnami/scripts/kafka/run.sh &
           pid=$$!;
@@ -67,3 +67,21 @@ services:
           condition: service_healthy
       command: >
         bash -c "sleep 3 && exec python -u consumer.py"
+
+    video_streamer:
+      build: ./VideoStreamer
+      networks:
+        - streaming_net
+      depends_on:
+        - vision_detector
+      
+
+    vision_detector:
+      build: ./VisionDetector
+      networks:
+        - streaming_net
+      
+        
+networks:
+  streaming_net:
+    driver: bridge
