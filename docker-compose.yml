@@ -44,6 +44,8 @@ services:
 
     sensor_producer:
       build: ./SensorProducer
+      volumes:
+        - ./SensorProducer:/app
       depends_on:
         kafka_broker:
           condition: service_healthy
@@ -54,6 +56,8 @@ services:
 
     data_sensor_manager:
       build: ./DataSensorManager
+      volumes:
+        - ./DataSensorManager:/app
       depends_on:
         kafka_broker:
           condition: service_healthy
@@ -62,6 +66,8 @@ services:
 
     alarm_reader:
       build: ./AlarmReader
+      volumes:
+        - ./AlarmReader:/app
       depends_on:
         kafka_broker:
           condition: service_healthy
@@ -70,18 +76,17 @@ services:
 
     video_streamer:
       build: ./VideoStreamer
-      networks:
-        - streaming_net
+      volumes:
+        - ./VideoStreamer:/app
       depends_on:
         - vision_detector
       
 
     vision_detector:
       build: ./VisionDetector
-      networks:
-        - streaming_net
+      volumes:
+        - ./VisionDetector:/app
+      ports:
+        - "8080:8080"
       
         
-networks:
-  streaming_net:
-    driver: bridge

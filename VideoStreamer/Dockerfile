@@ -18,4 +18,4 @@ COPY . .
 #     rtph264pay ! \
 #     udpsink host=127.0.0.1 port=5000 sync=true
 
-CMD ["gst-launch-1.0", "filesrc", "location=50_ways_to_fall.mp4", "!", "decodebin", "!", "videoconvert", "!", "x264enc", "tune=zerolatency", "bitrate=2000", "!", "mpegtsmux", "!", "udpsink", "host=vision_detector", "port=5000", "sync=true"]
+CMD ["gst-launch-1.0", "filesrc", "location=50_ways_to_fall.mp4", "!", "decodebin", "!", "videoconvert", "!" ,"clockoverlay", "halignment=left", "valignment=top", "time-format=%H:%M:%S:%S", "!", "videorate", "!", "video/x-raw,framerate=10/1", "!", "x264enc", "tune=zerolatency", "speed-preset=ultrafast", "bitrate=500", "!", "mpegtsmux", "!", "udpsink", "host=vision_detector", "port=5000", "sync=true"]
