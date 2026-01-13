@@ -13,6 +13,8 @@ The system is built on a containerized microservices architecture using Docker, 
 5.  **Vision Detector**: The core of the video analysis. It receives the UDP stream, utilizes the **YOLOv11-pose** model for human pose estimation, and detects falls based on geometric logic (aspect ratio and keypoint positioning).
 6.  **Alarm Reader**: A Flask Web App serving as a dashboard. It consumes messages from the `alarms` topic and updates the user interface in real-time.
 
+<img width="701" height="526" alt="high_level_architecture" src="https://github.com/user-attachments/assets/33339bf1-30b4-4b25-8bd0-2969eb1edf77" />
+
 ## 🚀 General Workflow
 
 The system operates in real-time following these steps:
@@ -64,4 +66,8 @@ The entire process is automated. Follow these steps from your terminal in the pr
    ```bash
    docker compose down
    ```
+## Example of system in use
+
+https://github.com/user-attachments/assets/b3f3b152-5d92-436e-b4d4-4966f1ba13df
+
 
