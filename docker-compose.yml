@@ -29,10 +29,16 @@ services:
         - "9092:9092"
         - "9093:9093"
       healthcheck:
-        test: ["CMD", "kafka-broker-api-versions.sh", "--bootstrap-server", "localhost:9092"]
-        interval: 30s
+      # Il comando elenca i topic, filtra esattamente i due nomi e conta se sono 2
+        test: 
+          [
+            "CMD-SHELL", 
+            "kafka-topics.sh --bootstrap-server localhost:9092 --list | grep -xE 'sensors_data|alarms' | wc -l | grep -q '2'"
+          ]
+        interval: 10s
         timeout: 10s
-        retries: 5
+        retries: 15
+        start_period: 30s
       command: > # Lancio uno script che crea i topic
         bash -c "
           /opt/bitnami/scripts/kafka/entrypoint.sh /opt/bitnami/scripts/kafka/run.sh &
@@ -81,18 +87,25 @@ services:
       build: ./VideoStreamer
       volumes:
         - ./VideoStreamer:/app
-      healthcheck:
-        test: ["CMD", "curl", "-f", "http://localhost:8080/health"] # O un endpoint semplice
-        interval: 5s     # Ogni quanto controllare
-        timeout: 3s      # Tempo massimo per una risposta
-        retries: 5       # Quanti tentativi falliti prima di considerare il container "unhealthy"
-        start_period: 10s # Tempo di grazia iniziale per permettere a Flask di avviarsi
+      depends_on:
+        vision_detector:
+          condition: service_healthy
+      
       
 
     vision_detector:
       build: ./VisionDetector
       volumes:
         - ./VisionDetector:/app
+      depends_on:
+        kafka_broker:
+          condition: service_healthy
+      healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:8080/health"] 
+        interval: 5s     
+        timeout: 3s      
+        retries: 10      
+        start_period: 15s 
       ports:
         - "8080:8080"
       

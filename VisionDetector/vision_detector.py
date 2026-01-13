@@ -151,6 +151,11 @@ def get_stream():
                 label = f"{status}"
 
                 cv2.rectangle(annotated_frame, (x1, y1), (x2, y2), color, 2)
+
+                # calcolo la lunghezza del testo
+                text_size = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 1, 2)[0]
+                # il rettangolo di sfondo per il testo
+                cv2.rectangle(annotated_frame, (x1, y1 - 70), (x1 + text_size[0], y1 - 30), color, -1)
                 cv2.putText(annotated_frame, label, (x1, y1 - 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
         
         print(f"Status: {status}")
