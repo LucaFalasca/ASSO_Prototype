@@ -66,7 +66,7 @@ The entire process is automated. Follow these steps from your terminal in the pr
    ```bash
    docker compose down
    ```
-## Example of system in use
+## 🎥 Example of system in use
 
 https://github.com/user-attachments/assets/b3f3b152-5d92-436e-b4d4-4966f1ba13df
 
