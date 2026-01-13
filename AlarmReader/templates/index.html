@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Alarm Manager</title>
+    <style>
+    .container { 
+        display: flex; 
+        gap: 20px; 
+        justify-content: center; 
+        margin-top: 50px; 
+    }
+
+    .rect {
+        width: 250px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        /* --- STILE RICHIESTO --- */
+        color: black;                /* Scritta nera */
+        border: 4px solid black;     /* Bordo nero spessore 4px */
+        box-sizing: border-box;      /* Il bordo resta dentro i 250px di larghezza */
+        /* ------------------------ */
+
+        font-weight: bold;
+        font-family: sans-serif;
+        border-radius: 12px;         /* Angoli leggermente arrotondati */
+        transition: background-color 0.4s ease; /* Effetto fluido al cambio colore */
+    }
+
+    /* Colori di default */
+    #rect1 { background-color: white; }
+    #rect2 { background-color: white; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div id="rect1" class="rect">SENSOR ALARM</div>
+    <div id="rect2" class="rect">FALL DETECTED ALARM</div>
+</div>
+
+<script>
+    async function aggiornaUI() {
+        try {
+            const response = await fetch('/get_colors');
+            const data = await response.json();
+            
+            document.getElementById('rect1').style.backgroundColor = data.rettangolo_1;
+            document.getElementById('rect2').style.backgroundColor = data.rettangolo_2;
+        } catch (error) {
+            console.error("Errore nel recupero colori:", error);
+        }
+    }
+
+    // Controlla lo stato ogni secondo per una risposta rapida
+    setInterval(aggiornaUI, 30);
+</script>
+
+</body>
+</html>

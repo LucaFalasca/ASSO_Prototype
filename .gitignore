@@ -1,2 +1,4 @@
-/KafkaData
+/kafka_data
 /VideoStreamer/50_ways_to_fall.mp4
+/VisionDetector/runs
+/VisionDetector/yolo11n-pose.pt

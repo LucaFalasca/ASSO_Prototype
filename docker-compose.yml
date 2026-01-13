@@ -1,7 +1,8 @@
 services:
     kafka_broker:
       container_name: kafka_broker
-      image: bitnami/kafka:latest
+      image: bitnamilegacy/kafka:latest
+      user: "1001"
       environment:
         # --- Configurazione del ruolo e del cluster ---
         - KAFKA_CFG_NODE_ID=0
@@ -22,7 +23,7 @@ services:
         - ALLOW_PLAINTEXT_LISTENER=yes
         - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
       volumes:
-        - ./KafkaData:/bitnami/kafka
+        - ./kafka_data:/bitnami/kafka
         - ./init-kafka.sh:/init-kafka.sh
       ports:
         - "9092:9092"
@@ -73,13 +74,19 @@ services:
           condition: service_healthy
       command: >
         bash -c "sleep 3 && exec python -u consumer.py"
+      ports:
+        - "8081:8081"
 
     video_streamer:
       build: ./VideoStreamer
       volumes:
         - ./VideoStreamer:/app
-      depends_on:
-        - vision_detector
+      healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:8080/health"] # O un endpoint semplice
+        interval: 5s     # Ogni quanto controllare
+        timeout: 3s      # Tempo massimo per una risposta
+        retries: 5       # Quanti tentativi falliti prima di considerare il container "unhealthy"
+        start_period: 10s # Tempo di grazia iniziale per permettere a Flask di avviarsi
       
 
     vision_detector:
@@ -89,4 +96,7 @@ services:
       ports:
         - "8080:8080"
       
+volumes:
+  kafka_data:
+    driver: local
         

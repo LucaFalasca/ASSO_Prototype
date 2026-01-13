@@ -6,9 +6,16 @@ from confluent_kafka import Consumer, Producer
 
 app = Flask(__name__)
 
-@app.route('/video')
+
+@app.route('/')
 def video_feed():
     return Response(get_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+@app.route('/health')
+def health_check():
+    return "OK", 200
+    
 
 
 def get_stream():
@@ -52,7 +59,7 @@ def get_stream():
     output_filename = 'output_video.mp4'
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
-    video_writer = cv2.VideoWriter(output_filename, fourcc, 10, frame_size)
+    #video_writer = cv2.VideoWriter(output_filename, fourcc, 10, frame_size)
 
     conf = {
         'bootstrap.servers': 'kafka_broker:9092', 
@@ -101,7 +108,7 @@ def get_stream():
                 else:
                     aspect_ratio = 0
 
-                fallen_threshold = 0.8
+                fallen_threshold = 1.2
                 sight_threshold = 0.6
 
                 if aspect_ratio > fallen_threshold:
@@ -149,7 +156,7 @@ def get_stream():
         print(f"Status: {status}")
         if status != "Not Fallen":
             print("Fall detected, sending alarm...")
-            producer.produce(alarm_topic, f'Alarm: Fall detected! Status: {status}')
+            producer.produce(alarm_topic, f'fall_detected_alarm: Fall detected! Status: {status}')
             producer.flush()
 
         _, buffer = cv2.imencode('.jpg', annotated_frame)

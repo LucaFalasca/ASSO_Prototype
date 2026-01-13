@@ -70,7 +70,7 @@ def msg_process(msg):
     
 def send_alarm(sensor_data):
      timestamp = sensor_data[0]
-     producer.produce(alarm_topic, f'Alarm: Sensor value exceeds threshold! ({timestamp})')
+     producer.produce(alarm_topic, f'sensor_alarm: Sensor value exceeds threshold! ({timestamp})')
 
 def shutdown():
         running = False

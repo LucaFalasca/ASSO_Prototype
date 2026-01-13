@@ -1,2 +1,4 @@
 opencv-python-headless
 ultralytics
+flask
+confluent_kafka==2.11.0
