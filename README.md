@@ -1,6 +1,6 @@
-# ASSO Prototype - Monitoring and Fall Detection System
+# ASSO Prototype
 
-This project is an advanced prototype for environmental sensor monitoring and automated fall detection using Computer Vision, integrating microservices that communicate through a message broker.
+This project is a prototype for environmental sensor monitoring and automated fall detection using Computer Vision, integrating microservices that communicate through a message broker.
 
 ## 🏗️ System Architecture
 
@@ -20,7 +20,7 @@ The system is built on a containerized microservices architecture using Docker, 
 The system operates in real-time following these steps:
 - The **Producer** and **Streamer** constantly send data (numerical and video).
 - The **Sensor Manager** and **Vision Detector** act as consumers and analyzers:
-    - If the sensor detects a value > 9, a sensor alarm is triggered.
+    - If the sensor 1 detects a value > 9, a sensor alarm is triggered.
     - If the vision algorithm detects a body in a horizontal position or meeting specific fall parameters, a fall alarm is triggered.
 - Alarms are sent to a centralized topic on Kafka.
 - The **Alarm Reader** retrieves these alarms and turns the corresponding UI indicators red to alert the operator.
