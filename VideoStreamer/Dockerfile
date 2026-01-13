@@ -11,11 +11,5 @@ RUN apt-get install -y yt-dlp
 
 COPY . .
 
-# RUN gst-launch-1.0 filesrc location=50_ways_to_fall.mp4 ! \
-#     decodebin ! \
-#     videoconvert ! \
-#     x264enc tune=zerolatency bitrate=2000 ! \
-#     rtph264pay ! \
-#     udpsink host=127.0.0.1 port=5000 sync=true
-
 CMD ["gst-launch-1.0", "filesrc", "location=50_ways_to_fall.mp4", "!", "decodebin", "!", "videoconvert", "!", "videorate", "!", "video/x-raw,framerate=24/1", "!", "x264enc", "tune=zerolatency", "speed-preset=ultrafast", "bitrate=500", "!", "mpegtsmux", "!", "udpsink", "host=vision_detector", "port=5000", "sync=true"]
+
