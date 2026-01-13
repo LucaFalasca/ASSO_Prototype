@@ -42,7 +42,7 @@ The entire process is automated. Follow these steps from your terminal in the pr
    *Note: The first run may take some time to download images and the YOLO model weights.*
 
 2. **Access the Dashboard**:
-   Open your browser and navigate to:
+   To view real-time alarms via the GUI, open your browser and navigate to:
    [http://localhost:8081](http://localhost:8081)
 
 3. **Vision Monitoring (Optional)**:
